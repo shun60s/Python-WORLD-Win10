@@ -1,0 +1,8 @@
+/__pycache__/
+/docs_local/
+*.bat
+*.pyc
+*.md~
+*.py~
+*.*~
+*.pdf
