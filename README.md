@@ -43,7 +43,7 @@ python test2.py -i xxxx.wav -s pitch_scaling  -f 1.5
 
 
 話す速さの変化は下図様なtemporal positionの間隔を変えているようだ。  
-![temporal1](docs/temporal_position..png)   
+![temporal1](docs/temporal_position.png)   
 
 
 励振源は、古典的な（周期的な）パルス源とノイズ源とを分けて構成するものではなく、  
