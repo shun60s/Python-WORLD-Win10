@@ -6,6 +6,9 @@
 #                add argparse
 #                visualized ON 1
 #   Date:        2018.10
+#
+#   Change:      add visualize for spectrum comparison option
+#   Date:        2018.11
 #---------------------------------------------------------------------------------------------
 #   This is based on
 #         prosody.py
@@ -102,4 +105,5 @@ if __name__ == '__main__':
         snd.wait_done()
     if 1:  # visualize
         vocoder.draw(x, dat)
-
+    if 0:  # visualize for spectrum comparison
+        vocoder.draw2(x, dat)

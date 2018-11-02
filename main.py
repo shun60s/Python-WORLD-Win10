@@ -14,6 +14,9 @@
 #   Change:      remove swipe
 #                add some print sentence to show state information
 #   Date:        2018.10
+#
+#   Change:      add draw2 for visualize spectrum comparison
+#   Date:        2018.11
 #---------------------------------------------------------------------------------------------
 #   This is based on
 #         main.py
@@ -294,6 +297,56 @@ class World(object):
         ax[4].set_title('WORLD fundamental frequency')
         ax[4].plot(time, dat['f0'])
         ax[4].set_ylabel('time (s)')
+        
+        fig.tight_layout() # add
+        plt.show()
+
+    def draw2(self, x: np.ndarray, dat: dict):
+        '''
+        An example of visualize WORLD components, 
+            original signal, 
+            pitch-synchronous spectrogram
+            spectrogram of CheapTrick outtput.
+        Frequency range imshow limits upto 5KHz (5000.0Hz)
+        imshow uses same value of vmin and vmax to gray scale
+        '''
+        from matplotlib import pyplot as plt
+
+        fs = dat['fs']
+        time = dat['temporal_positions']
+        y = dat['out']
+        
+        fig, ax = plt.subplots(nrows=3, figsize=(8, 6), sharex=True)
+        ax[0].set_title('input signal and resynthesized-signal')
+        ax[0].plot(np.arange(len(x)) / fs, x, alpha=0.5)
+        ax[0].plot(np.arange(len(y)) / fs, y, alpha=0.5)
+        ax[0].set_xlabel('samples')
+        ax[0].legend(['original', 'synthesis'])
+        
+        X = dat['ps spectrogram']
+        X = np.where(X==0, sys.float_info.epsilon, X)
+        ax[1].set_title('pitch-synchronous spectrogram')
+        # print ('X[half].shape ', X[:X.shape[0] // 2, :].shape )  # (512,159)
+        
+        high_freq=5000.0  # set high limit frequency to imshow
+        fmax0= int (  X[:X.shape[0] // 2, :].shape[0]  * high_freq / (fs/2))
+        
+        # vmin0 = np.amin( 20 * np.log10(np.abs(X[:X.shape[0] // 2, :]) ))
+        # vmax0 = np.amax( 20 * np.log10(np.abs(X[:X.shape[0] // 2, :]) ))
+        vmin0 = np.amin( 20 * np.log10(np.abs(X[:fmax0, :]) ))
+        vmax0 = np.amax( 20 * np.log10(np.abs(X[:fmax0, :]) ))
+        print ('imshow vmax, vmin ', vmax0, vmin0)
+        
+        ax[1].imshow(20 * np.log10(np.abs(X[:fmax0, :])), cmap=plt.cm.gray_r, origin='lower',
+                     extent=[0, len(x) / fs, 0, high_freq], aspect='auto', vmin=vmin0, vmax=vmax0)
+        ax[1].set_ylabel('frequency (Hz)')
+        ax[2].set_title('WORLD spectrogram')
+        Y = dat['spectrogram']
+        #print ('Y.shape', Y.shape)  # (513, 159)
+        Y = np.where(Y < sys.float_info.epsilon, sys.float_info.epsilon, Y)
+        ax[2].imshow(20 * np.log10(Y[:fmax0+1, :]), cmap=plt.cm.gray_r, origin='lower',
+                     extent=[0, len(x) / fs, 0, high_freq], aspect='auto',  vmin=vmin0, vmax=vmax0)
+        ax[2].set_ylabel('frequency (Hz)')
         
         fig.tight_layout() # add
         plt.show()

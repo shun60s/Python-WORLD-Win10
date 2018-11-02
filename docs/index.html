@@ -63,8 +63,16 @@ python test2.py -i xxxx.wav -s pitch_scaling  -f 1.5
 <br />
 励振源は、古典的な（周期的な）パルス源とノイズ源とを分けて構成するものではなく、<br />
 入力信号のスペクトルをピッチ同期で求めたスペクトル包絡で割ったものを使っているようである。<br />
-<img src="excitation_signal.png" alt="excitatiom_signal11" > <br />
+<img src="excitation_signal.png" alt="excitatiom_signal1" > <br />
 励振源とスペクトル包絡は完全に独立ではないようだ。<br />
+
+<br />
+ぎざぎざ波形をもつFFTスペクトルを滑らかな包絡にする方法は、ケプストラムでT0の整数倍が零になる
+スムージングフィルターを掛けて実現しているようだ。<br />
+<img src="remove-TM-comp.png" alt="cheaptrick1" > <br />
+処理前後のスペクトルを比較してみた。<br />
+<img src="aiueo_spectrum_compare.png" alt="spectrum_compare1" > <br />
+
 
 
 <h2>主な変更点  </h2>
